@@ -4,7 +4,7 @@ from geopy.geocoders import Nominatim
 geolocator = Nominatim(user_agent="my_app")
 
 # Perform geocoding
-location = geolocator.geocode("Lagos State")
+location = geolocator.geocode("Oyo State")
 
 # Extract latitude and longitude
 latitude = location.latitude

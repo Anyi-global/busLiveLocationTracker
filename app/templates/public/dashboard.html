@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Geolocation App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <div class="menu-bar">
+        <div class="left-menu">
+            <h1>Geolocation App</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="search-bar">
+                <form action="/geocode" method="POST" id="search-form">
+                    <input type="text" name="address" placeholder="Enter an address">
+                    <input type="submit" value="Search">
+                </form>
+            </div>
+            <h2><a href="/dashboard">Dashboard</a></h2>
+            <div class="navigation">
+                <ul>
+                    <li><a href="/vehicle">Vehicles</a></li>
+                    <hr class="divider">
+                    <li><a href="/driver">Drivers</a></li>
+                    <hr class="divider">
+                    <li><a href="/routes">Routes</a></li>
+                    <hr class="divider">
+                    <li><a href="/passenger">Passengers</a></li>
+                    <hr class="divider">
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        {% with messages = get_flashed_messages(category_filter=["success"]) %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-success alert-dismissible fade show"
+                                         role="alert">
+                                         <i class="bi-check-circle-fill fs-5 mx-2"></i><span>{{ message }}</span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="col-sm-6">
+                        {% with messages = get_flashed_messages(category_filter=["danger"]) %}
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-danger alert-dismissible fade show"
+                                         role="alert">
+                                         <i class="bi-exclamation-octagon-fill fs-5 mx-2"></i><span>{{ message }}</span>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+              </div>
+            <div id="map"></div>
+        </div>
+
+         <!-- Locations table -->
+        <div class="locations-container">
+            <h2 style="text-align: center;">Locations</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vehicle_ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Speed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>VH_1001</td>
+                        <td>15/09/2023</td>
+                        <td>12:05:20</td>
+                        <td>6.5269033</td>
+                        <td>3.5774005</td>
+                        <td>80km</td>
+                    </tr>
+                    <tr>
+                        <td>VH_1001</td>
+                        <td>15/09/2023</td>
+                        <td>12:30:09</td>
+                        <td>4.7629786</td>
+                        <td>6.028898</td>
+                        <td>82km</td>
+                    </tr>
+                    <tr>
+                        <td>VH_1001</td>
+                        <td>15/09/2023</td>
+                        <td>1:59:02</td>
+                        <td>4.7629786</td>
+                        <td>6.028898</td>
+                        <td>75km</td>
+                    </tr>
+                    <tr>
+                        <td>VH_1001</td>
+                        <td>15/09/2023</td>
+                        <td>1:15:18</td>
+                        <td>6.2611658</td>
+                        <td>6.9373715</td>
+                        <td>67km</td>
+                    </tr>
+                    <tr>
+                        <td>VH_1001</td>
+                        <td>15/09/2023</td>
+                        <td>2:00:10</td>
+                        <td>8.2151249</td>
+                        <td>3.5642897</td>
+                        <td>84km</td>
+                    </tr>
+                </tbody>
+                <!-- {% for location in locations %} -->
+                <!-- {% endfor %} -->
+            </table>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([{{ latitude }}, {{ longitude }}], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(map);
+
+        // Add a marker for the searched location
+        L.marker([{{ latitude }}, {{ longitude }}]).addTo(map);
+    </script>
+</body>
+</html>
